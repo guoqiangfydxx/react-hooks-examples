@@ -1,32 +1,43 @@
 import React, { useState } from 'react'
+import useForm from 'react-hook-form'
 import './index.css'
 
 function LoginForm () {
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const { register, handleSubmit, errors } = useForm(); 
 
-  function handleUsernameChange (e) {
+  const handleUsernameChange = (e) => {
     setUsername(e.target.value)
   }
-
-  function handlePasswordChange (e) {
-    setPassword(e.target.value)
-  }
+  const onSubmit = data => {
+    console.log(data);
+  };
 
   return (
     <div className='loginForm'>
       <h3>Please login:</h3>
-      <input
-        placeholder='username'
-        value={username}
-        onChange={handleUsernameChange}
-      />
-      <input
-        type='password'
-        placeholder='password'
-        value={password}
-        onChange={handlePasswordChange}
-      />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          placeholder='username'
+          onChange={handleUsernameChange}
+          ref={register}
+          name='username'
+          value={username}
+        />
+        <input
+          type='password'
+          placeholder='password'
+          // onChange={handlePasswordChange}
+          ref={register({
+            required: true
+          })}
+          name='password'
+        />
+        {errors.password && 'password is required.'}
+
+        <input type='submit' />
+      </form>
+      
     </div>
   )
 }
